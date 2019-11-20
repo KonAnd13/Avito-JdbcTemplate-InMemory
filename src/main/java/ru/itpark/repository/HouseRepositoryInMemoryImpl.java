@@ -35,14 +35,7 @@ public class HouseRepositoryInMemoryImpl implements HouseRepository {
 
     @Override
     public List<House> searchByDistrict(String ... district) {
-        return houses.stream().filter(o -> {
-            for (String metro : district) {
-                if (o.getDistrict().contains(metro)) {
-                    return true;
-                }
-            }
-            return false;
-        }).collect(Collectors.toList());
+        return houses.stream().filter(o -> Arrays.asList(district).contains(o.getDistrict())).collect(Collectors.toList());
     }
 
     @Override
