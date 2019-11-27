@@ -71,16 +71,15 @@ public class HouseRepositoryJdbcImpl implements HouseRepository {
 
     @Override
     public List<House> searchByDistrict(String ... district) {
-        StringBuilder parameterBuilder = new StringBuilder();
-        parameterBuilder.append(" (");
+        String[] numberOfParameters = new String[district.length];
         for (int i = 0; i < district.length; i++) {
-            parameterBuilder.append("?");
-            if (district.length > i + 1) { parameterBuilder.append(","); }
+            numberOfParameters[i] = "?";
         }
-        parameterBuilder.append(")");
+        String parameterBuilder = String.join(",", numberOfParameters);
+
         return JdbcTemplate.executeQuery(
                 url,
-                "SELECT * FROM houses WHERE district in" + parameterBuilder,
+                "SELECT * FROM houses WHERE district in (" + parameterBuilder + ")",
                 pstmt -> {
                     int index = 1;
                     for (String s : district) {
